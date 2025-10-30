@@ -1,10 +1,10 @@
 import { Stack } from 'expo-router';
 
-export default function Layout() {
+export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ title: 'Alfabeto em Libras' }} />
-      <Stack.Screen name="letter/[letter]" options={{ title: 'Letra' }} />
+    <Stack screenOptions={{ headerTitleAlign: 'center' }}>
+      <Stack.Screen name="index" options={{ title: 'Librar' }} />
+      <Stack.Screen name="letter" options={{ headerShown: false }} />
     </Stack>
   );
 }

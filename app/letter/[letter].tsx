@@ -43,8 +43,10 @@ export default function ValidateSignScreen() {
 
   useEffect(() => {
     if (!permission) return;
-    if (!permission.granted) requestPermission();
-  }, [permission]);
+    if (!permission.granted && permission.canAskAgain) {
+      requestPermission();
+    }
+  }, [permission, requestPermission]);
 
   const BaseScreen = ({ children }: { children: React.ReactNode }) => (
     <View style={[styles.safe, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
@@ -68,15 +70,21 @@ export default function ValidateSignScreen() {
       <BaseScreen>
         <View style={styles.center}>
           <Text style={styles.message}>Precisamos da câmera para validar o sinal.</Text>
-          <StyledButton label="Permitir Câmera" onPress={requestPermission} fullWidth />
+          <StyledButton
+            label="Permitir Câmera"
+            onPress={async () => {
+              await requestPermission();
+            }}
+            fullWidth
+          />
         </View>
       </BaseScreen>
     );
   }
 
   const getBaseURL = () => {
-    if (Platform.OS === 'android') return 'http://10.0.2.2:8000'; // AVD
-    return 'http://192.168.1.22:8000'; // iOS sim / dispositivo físico (LAN)
+    if (Platform.OS === 'android') return 'http://10.0.2.2:8000';
+    return 'http://192.168.1.22:8000';
   };
 
   const takePhoto = async () => {
