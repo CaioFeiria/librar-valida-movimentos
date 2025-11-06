@@ -50,7 +50,7 @@ export default function ValidateSignScreen() {
   }, [permission, requestPermission]);
 
   const BaseScreen = ({ children }: { children: React.ReactNode }) => (
-    <View style={[styles.safe, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+    <View style={[styles.safe, { paddingTop: 0, paddingBottom: insets.bottom }]}>
       <StatusBar barStyle="dark-content" />
       {children}
     </View>

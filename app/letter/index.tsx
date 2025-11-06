@@ -1,3 +1,4 @@
+// app/letter/index.tsx
 import { useRouter } from 'expo-router';
 import React, { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
@@ -9,8 +10,8 @@ export default function AlphabetScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
 
-  const GAP = 14;
-  const PADDING_H = 24;
+  const GAP = 18;
+  const PADDING_H = 35;
   const numCols = width >= 900 ? 4 : width >= 600 ? 3 : 2;
 
   const tileSize = useMemo(() => {
@@ -19,21 +20,16 @@ export default function AlphabetScreen() {
   }, [width, numCols]);
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <ScrollView contentContainerStyle={styles.scroll}>
+    // ⬇️ apenas bottom: cola o conteúdo na stack bar
+    <SafeAreaView style={styles.safe} edges={['bottom']}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        // ⬇️ evita ajustes automáticos que às vezes acrescentam espaço
+        contentInsetAdjustmentBehavior="never"
+      >
         <Text style={styles.title}>Selecione uma Letra</Text>
 
-        <View
-          style={[
-            styles.grid,
-            {
-              rowGap: GAP,
-              columnGap: GAP,
-              paddingHorizontal: PADDING_H,
-              paddingBottom: 24,
-            },
-          ]}
-        >
+        <View style={[styles.grid, { rowGap: GAP, columnGap: GAP, paddingHorizontal: PADDING_H, paddingBottom: 24 }]}>
           {ALPHABET.map((letter) => (
             <Pressable
               key={letter}
@@ -56,7 +52,7 @@ export default function AlphabetScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#fff' },
   scroll: {
-    paddingTop: 16,
+    paddingTop: 0, // ⬅️ sem espaço no topo
     paddingBottom: 24,
     backgroundColor: '#fff',
   },
@@ -65,13 +61,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     textAlign: 'center',
+    marginTop: 0, // ⬅️ garante zero
     marginBottom: 16,
   },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    rowGap: 14, // iOS/Android antigos ignoram; já temos `gap` acima como fallback
+    rowGap: 14,
   },
   tile: {
     backgroundColor: '#fff',
