@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
-import { useLocalSearchParams } from 'expo-router';
+import { Href, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -26,6 +26,7 @@ type ValidateResponse = {
 };
 
 export default function ValidateSignScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const isShort = height < 720; // telas mais baixinhas
@@ -83,8 +84,8 @@ export default function ValidateSignScreen() {
   }
 
   const getBaseURL = () => {
-    if (Platform.OS === 'android') return 'http://10.0.2.2:8000';
-    return 'http://192.168.1.22:8000';
+    if (Platform.OS === 'android') return process.env.EXPO_PUBLIC_API_URL_ANDROID!;
+    return process.env.EXPO_PUBLIC_API_URL_IOS!;
   };
 
   const takePhoto = async () => {
@@ -141,7 +142,6 @@ export default function ValidateSignScreen() {
         </Text>
       </View>
 
-      {/* SCROLL habilitado */}
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={[styles.scrollInner, { paddingBottom: 20 + insets.bottom }]}
@@ -165,6 +165,12 @@ export default function ValidateSignScreen() {
               kind="primary"
               fullWidth
               style={{ marginTop: 16 }}
+            />
+            <StyledButton
+              label="▶️ Aprender Sinal"
+              onPress={() => router.push(`/letter-video/${encodeURIComponent(targetLetter)}` as Href)}
+              kind="secondary"
+              fullWidth
             />
           </>
         ) : (
